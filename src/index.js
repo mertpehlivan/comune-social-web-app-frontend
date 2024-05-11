@@ -1,17 +1,71 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { Container, ThemeProvider, createTheme } from '@mui/material';
+import { BrowserRouter } from 'react-router-dom';
+import AuthProvider from './auth/AuthProvider';
+const colors = {
+  primary: '#EE6C4D',
+  secondary: '#FFFFFF',
+  error: '#f44336',
+  warning: '#ff9800',
+  info: '#2196f3',
+  success: '#4caf50',
+};
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Roboto',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+  
+  palette: {
+    
+    primary: {
+      main: '#EE6C4D',
+    },
+    secondary: {
+      main: '#FFFFFF',
+    },
+    error: {
+      main: '#f44336',
+    },
+    warning: {
+      main: '#ff9800',
+    },
+    info: {
+      main: '#2196f3',
+    },
+    success: {
+      main: '#4caf50',
+    },
+    background:{
+     
+      default:'#FFFFFF'
+    }
+   
+  },
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  <ThemeProvider theme={theme}>
+    <Container maxWidth style={{backgroundColor:theme.palette.background.paper}}>
+      <BrowserRouter>
+        <AuthProvider />
+      </BrowserRouter>
+    </Container>
+  </ThemeProvider>
+
+);
