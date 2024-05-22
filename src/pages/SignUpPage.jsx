@@ -13,7 +13,9 @@ const SignUpPage = () => {
                         <Grid container>
                             <Grid item xs={6}>
                                 <Stack justifyContent="start" alignItems="start" pl={2}>
-                                    <Button variant='outlined' startIcon={<Home />}>Go Home</Button>
+                                    <Link to="/">
+                                        <Button variant='outlined' startIcon={<Home />}>Go Home</Button>
+                                    </Link>
                                 </Stack>
                                 <Stack alignItems="center" justifyContent="center" width="100%" >
                                     <Box component="img" src={Logo} width={100} />
@@ -41,9 +43,11 @@ const SignUpPage = () => {
                             <Grid item xs={6}>
                                 <Stack alignItems="center">
                                     <Box component="img" src={LoginImage} width={500} />
-                                    <Button sx={{ width: 300, height: 50 }} startIcon={<People />} variant='outlined'>
-                                        Create Community
-                                    </Button>
+                                    <Link to="/signup-community">
+                                        <Button sx={{ width: 300, height: 50 }} startIcon={<People />} variant='outlined'>
+                                            Create Community
+                                        </Button>
+                                    </Link>
                                 </Stack>
                             </Grid>
                         </Grid>

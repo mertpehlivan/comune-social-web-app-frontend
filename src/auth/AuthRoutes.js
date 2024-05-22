@@ -15,7 +15,7 @@ export const AuthRoutes = () => {
             <Grid>
                 <Routes>
                     {nav.map((r, i) => {
-                        if (r.isPrivate && authenticated && user.emailVerfiactionStatus === true) {
+                        if (r.isPrivate && authenticated && r.role.includes(user.accountRole)) {
                             return (
                                 <Route key={i} path={r.path} element={r.element}>
                                     {r.children && r.children.length > 0 &&

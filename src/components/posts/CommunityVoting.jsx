@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Box, Button, ButtonGroup, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, ButtonGroup, Card, CardContent, Chip, IconButton, LinearProgress, Stack, Typography } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import PostStepper from './PostStepper';
 import { ArrowDropDown, ArrowDropUp, Comment, Favorite, FavoriteBorder, FavoriteBorderOutlined, HeartBroken, HeartBrokenOutlined } from '@mui/icons-material';
+import ProgessBar from './ProgessBar';
+import { useThemeConfig } from '../../contexts/ThemeConfigProvider';
 import { Link } from 'react-router-dom';
-import CommentComponent from './CommentComponent'
-const Post = () => {
+
+const CommunityVoting = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [text, setText] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur rhoncus semper neque, cursus ultrices tortor posuere vel. Etiam placerat tempor sem, pulvinar fringilla quam sagittis nec. Mauris ultricies vulputate lobortis. In sit amet ornare justo, maximus volutpat eros. Nullam eget imperdiet tellus. Fusce venenatis, orci vitae rutrum vehicula, est magna maximus nibh, vel bibendum justo sapien vel eros. Nunc in dapibus lorem. Nullam nisl enim, pellentesque quis massa at, congue laoreet tortor. Aliquam maximus id lectus at tristique. Suspendisse dignissim consectetur sapien, at auctor justo auctor sed. Phasellus tincidunt tincidunt eleifend. In ac bibendum ipsum. Nam cursus augue ligula, ut mattis lorem volutpat nec. Fusce eget ex eu ligula molestie lacinia. Maecenas hendrerit maximus ipsum, in elementum felis ultricies id.")
     const [textSee, setTextSee] = useState("")
@@ -18,7 +20,21 @@ const Post = () => {
     const [likesCount, setLikesCount] = useState(0)
     const [dislikesCount, setDislikesCount] = useState(0)
     const [comments, setComments] = useState([]);
-    const [commentToggel,setCommentToggle] = useState(false)
+    const [voitingStatus, setVoitingStatus] = useState(false);
+    const { themeConfig } = useThemeConfig()
+    const {
+        postBgColor,
+        postTextColor,
+        postButtonColor,
+        postBorderColor,
+        postBorderSize,
+        postButtonTextColor
+    } = themeConfig.postBar;
+    const [voiting, setVoiting] = useState("");
+    const handleVoting = (voiting) => {
+        setVoitingStatus(true)
+        setVoiting(voiting)
+    }
     const handleLike = () => {
         if (like) {
             setLike(false)
@@ -51,7 +67,7 @@ const Post = () => {
     };
 
     const handleComment = () => {
-        setCommentToggle(prev => !prev)
+        // Burada yorum ekleme işlemleri yapılabilir.
     };
     useEffect(() => {
         setTextSize(text.length > 200)
@@ -81,7 +97,7 @@ const Post = () => {
 
 
     return (
-        <Card sx={{ borderRadius: 3 }}>
+        <Card sx={{ borderRadius: 3,bgcolor:postBgColor,border:`${postBorderSize}px solid`, borderColor:postBorderColor }}>
             <CardContent>
                 <Stack direction="row" justifyContent="space-between">
 
@@ -91,22 +107,23 @@ const Post = () => {
                             <Avatar src="https://avatars.githubusercontent.com/u/81866624?v=4" />
                         </Box>
                         <Stack direction="column">
-                            <Typography variant="body1">Mark Zoe</Typography>
-                            <Typography color="gray" variant="body2">@markzoe</Typography>
+                            <Typography color={postTextColor} variant="body1">Mark Zoe</Typography>
+                            <Typography color={postTextColor} sx={{ opacity: 0.4 }} variant="body2">@markzoe</Typography>
 
                         </Stack>
 
                     </Stack>
                     <Chip sx={{ bgcolor: "primary.main", color: "secondary.main" }} label={<Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant='subtitle2'>Community:</Typography>
-                        <Chip sx={{ bgcolor: "secondary.main", color: "primary.main" }} icon={<Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMhZIRKxDV0YgFzApUuusOMjLyqM7LJi_raNS7iOuHpQ&s' sx={{ width: 20, height: 20 }} />} label={<Link to="/community">zirratbank</Link>}></Chip>
+                        <Typography color={postTextColor} variant='subtitle2'>Community:</Typography>
+                        <Chip sx={{ bgcolor: "secondary.main", color: postTextColor }} icon={<Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMhZIRKxDV0YgFzApUuusOMjLyqM7LJi_raNS7iOuHpQ&s' sx={{ width: 20, height: 20 }} />} label={<Link to="/community">zirratbank</Link>}></Chip>
                     </Stack>}></Chip>
 
                 </Stack>
+
             </CardContent>
             <CardContent className='animate__slideOutDown'>
                 <Stack direction="row" textAlign="start" spacing={1}>
-                    <Typography>{textSee}{textSize && <Button size='small' startIcon={(moreText ? <ArrowDropDown /> : <ArrowDropUp />)} onClick={() => setMoreText(prev => !prev)} variant='text'>See More</Button>}</Typography>
+                    <Typography color={postTextColor}>{textSee}{textSize && <Button size='small' startIcon={(moreText ? <ArrowDropDown /> : <ArrowDropUp />)} onClick={() => setMoreText(prev => !prev)} style={{color:postTextColor}} variant='text'>See More</Button>}</Typography>
                 </Stack>
 
             </CardContent>
@@ -114,19 +131,37 @@ const Post = () => {
                 <Stack spacing={1}>
                     <Stack>
 
+                        {!voitingStatus && <Stack spacing={1} border="1px solid" borderColor="primary.main" p={2} borderRadius={3}>
+                            <Typography color={postTextColor} variant='h5'>
+                                Which football team do you favour?
+                            </Typography>
+                            <Button  style={{color:postButtonTextColor,backgroundColor:postButtonColor,borderColor:postTextColor,border:`${postBorderSize}px solid`}} variant='outlined' onClick={() => handleVoting("Fenerbahçe")}>Fenerbahçe</Button>
+                            <Button style={{color:postButtonTextColor,backgroundColor:postButtonColor,borderColor:postTextColor,border:`${postBorderSize}px solid`}} variant='outlined' onClick={() => handleVoting("Galatasaray")}>Galatasaray</Button>
+                            <Button style={{color:postButtonTextColor,backgroundColor:postButtonColor,borderColor:postTextColor,border:`${postBorderSize}px solid`}} variant='outlined' onClick={() => handleVoting("Beşiktaş")}>Beşiktaş</Button>
+                            <Button style={{color:postButtonTextColor,backgroundColor:postButtonColor,borderColor:postTextColor,border:`${postBorderSize}px solid`}} variant='outlined' onClick={() => handleVoting("Trabzonspor")}>Trabzonspor</Button>
 
-                        <PostStepper media={slides} />
+                        </Stack>}
+                        {voitingStatus && <Stack spacing={1} border="1px solid" borderColor="primary.main" p={2} borderRadius={3}>
+                            <Typography color={postTextColor} variant='h5'>
+                                Which football team do you favour?
+                            </Typography>
+                            {voiting == "Fenerbahçe" ? <ProgessBar  label="Fenerbahçe" progessValue={60} /> : <ProgessBar selected={true} label="Fenerbahçe" progessValue={60} />}
+                            {voiting == "Galatasarya" ? <ProgessBar label="Galatasarya" progessValue={60} /> : <ProgessBar label="Galatasarya" progessValue={60} />}
+                            {voiting == "Beşiktaş" ? <ProgessBar label="Beşiktaş" progessValue={60} /> : <ProgessBar label="Beşiktaş" progessValue={60} />}
+                            {voiting == "Trabzonspor" ? <ProgessBar label="Trabzonspor" progessValue={60} /> : <ProgessBar label="Trabzonspor" progessValue={60} />}
+                        </Stack>}
+
 
                     </Stack>
                     <Stack direction="row" borderRadius={3}>
                         <ButtonGroup fullWidth size='small' >
-                            <Button variant={like ? 'contained' : 'outlined'} startIcon={like ? <Favorite /> : <FavoriteBorderOutlined />} onClick={handleLike}>
+                        <Button style={{backgroundColor:postButtonColor,color:postButtonTextColor ,opacity:like ? 1 : 0.6}} variant={like ? 'contained' : 'outlined'} startIcon={like ? <Favorite sx={{color:postButtonTextColor}}/> : <FavoriteBorderOutlined sx={{color:postButtonTextColor}}/>} onClick={handleLike}>
                                 Like {likesCount}
                             </Button>
-                            <Button variant={dislike ? 'contained' : 'outlined'} startIcon={dislike ? <HeartBroken /> : <HeartBrokenOutlined />} onClick={handleDislike}>
+                            <Button style={{backgroundColor:postButtonColor,color:postButtonTextColor,opacity:dislike ? 1 : 0.6}} variant={dislike ? 'contained' : 'outlined'} startIcon={dislike ? <HeartBroken sx={{color:postButtonTextColor}}/> : <HeartBrokenOutlined sx={{color:postButtonTextColor}}/>} onClick={handleDislike}>
                                 Dislike {dislikesCount}
                             </Button>
-                            <Button sx={{opacity:commentToggel && 0.4}} startIcon={<Comment />} onClick={handleComment}>
+                            <Button style={{backgroundColor:postButtonColor,color:postButtonTextColor}} startIcon={<Comment sx={{color:postButtonTextColor}}/>} onClick={handleComment}>
                                 Comment {comments.length}
                             </Button>
                         </ButtonGroup>
@@ -134,9 +169,8 @@ const Post = () => {
                 </Stack>
 
             </CardContent>
-            {commentToggel && <CommentComponent/>}
         </Card>
     );
 };
 
-export default Post;
+export default CommunityVoting;

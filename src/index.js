@@ -61,11 +61,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
   <ThemeProvider theme={theme}>
-    <Container maxWidth style={{backgroundColor:theme.palette.background.paper}}>
+    
       <BrowserRouter>
         <AuthProvider />
       </BrowserRouter>
-    </Container>
+ 
   </ThemeProvider>
 
 );

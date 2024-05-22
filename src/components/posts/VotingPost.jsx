@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Box, Button, ButtonGroup, Card, CardContent, IconButton, LinearProgress, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, ButtonGroup, Card, CardContent, Chip, IconButton, LinearProgress, Stack, Typography } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import PostStepper from './PostStepper';
 import { ArrowDropDown, ArrowDropUp, Comment, Favorite, FavoriteBorder, FavoriteBorderOutlined, HeartBroken, HeartBrokenOutlined } from '@mui/icons-material';
 import ProgessBar from './ProgessBar';
+import { Link } from 'react-router-dom';
 
 const Post = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -88,14 +89,25 @@ const Post = () => {
     return (
         <Card sx={{ borderRadius: 3 }}>
             <CardContent>
-                <Stack direction="row" alignItems="start" spacing={1}>
-                    <Box>
-                        <Avatar src="https://avatars.githubusercontent.com/u/81866624?v=4" />
-                    </Box>
-                    <Stack direction="column">
-                        <Typography variant="body1">Mark Zoe</Typography>
-                        <Typography color="gray" variant="body2">@markzoe</Typography>
+                <Stack direction="row" justifyContent="space-between">
+
+
+                    <Stack direction="row" alignItems="start" spacing={1}>
+                        <Box>
+                            <Avatar src="https://avatars.githubusercontent.com/u/81866624?v=4" />
+                        </Box>
+                        <Stack direction="column">
+                            <Typography variant="body1">Mark Zoe</Typography>
+                            <Typography color="gray" variant="body2">@markzoe</Typography>
+
+                        </Stack>
+
                     </Stack>
+                    <Chip sx={{ bgcolor: "primary.main", color: "secondary.main" }} label={<Stack direction="row" alignItems="center" spacing={1}>
+                        <Typography variant='subtitle2'>Community:</Typography>
+                        <Chip sx={{ bgcolor: "secondary.main", color: "primary.main" }} icon={<Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMhZIRKxDV0YgFzApUuusOMjLyqM7LJi_raNS7iOuHpQ&s' sx={{ width: 20, height: 20 }} />} label={<Link to="/community">zirratbank</Link>}></Chip>
+                    </Stack>}></Chip>
+
                 </Stack>
             </CardContent>
             <CardContent >
@@ -109,24 +121,24 @@ const Post = () => {
                 <Stack spacing={1}>
                     <Stack>
 
-                       {!voitingStatus && <Stack spacing={1} border="1px solid" borderColor="primary.main" p={2} borderRadius={3}>
+                        {!voitingStatus && <Stack spacing={1} border="1px solid" borderColor="primary.main" p={2} borderRadius={3}>
                             <Typography variant='h5'>
                                 Which football team do you favour?
                             </Typography>
-                            <Button variant='outlined' onClick={()=>handleVoting("Fenerbahçe")}>Fenerbahçe</Button>
-                            <Button variant='outlined' onClick={()=>handleVoting("Galatasaray")}>Galatasaray</Button>
-                            <Button variant='outlined' onClick={()=>handleVoting("Beşiktaş")}>Beşiktaş</Button>
-                            <Button variant='outlined' onClick={()=>handleVoting("Trabzonspor")}>Trabzonspor</Button>
-                            
+                            <Button variant='outlined' onClick={() => handleVoting("Fenerbahçe")}>Fenerbahçe</Button>
+                            <Button variant='outlined' onClick={() => handleVoting("Galatasaray")}>Galatasaray</Button>
+                            <Button variant='outlined' onClick={() => handleVoting("Beşiktaş")}>Beşiktaş</Button>
+                            <Button variant='outlined' onClick={() => handleVoting("Trabzonspor")}>Trabzonspor</Button>
+
                         </Stack>}
                         {voitingStatus && <Stack spacing={1} border="1px solid" borderColor="primary.main" p={2} borderRadius={3}>
                             <Typography variant='h5'>
                                 Which football team do you favour?
                             </Typography>
-                            {voiting == "Fenerbahçe" ? <ProgessBar label="Fenerbahçe" progessValue={60}/> : <ProgessBar selected={true} label="Fenerbahçe" progessValue={60}/>}
-                            {voiting == "Galatasarya" ? <ProgessBar label="Galatasarya" progessValue={60}/> : <ProgessBar label="Galatasarya" progessValue={60}/>}
-                            {voiting == "Beşiktaş" ? <ProgessBar label="Beşiktaş" progessValue={60}/> : <ProgessBar label="Beşiktaş" progessValue={60}/>}
-                            {voiting == "Trabzonspor" ? <ProgessBar label="Trabzonspor" progessValue={60}/> : <ProgessBar label="Trabzonspor" progessValue={60}/>}
+                            {voiting == "Fenerbahçe" ? <ProgessBar label="Fenerbahçe" progessValue={60} /> : <ProgessBar selected={true} label="Fenerbahçe" progessValue={60} />}
+                            {voiting == "Galatasarya" ? <ProgessBar label="Galatasarya" progessValue={60} /> : <ProgessBar label="Galatasarya" progessValue={60} />}
+                            {voiting == "Beşiktaş" ? <ProgessBar label="Beşiktaş" progessValue={60} /> : <ProgessBar label="Beşiktaş" progessValue={60} />}
+                            {voiting == "Trabzonspor" ? <ProgessBar label="Trabzonspor" progessValue={60} /> : <ProgessBar label="Trabzonspor" progessValue={60} />}
                         </Stack>}
 
 

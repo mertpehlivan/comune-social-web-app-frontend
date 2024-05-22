@@ -9,29 +9,16 @@ import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Avatar, Card, CardContent, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
-import { useThemeConfig } from '../../contexts/ThemeConfigProvider';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone); // Saat dilimi eklentisini kullan
 
 const highlightedDays = [1, 2, 15];
 
-export default function Calendar() {
+export default function CalendarHome() {
   const [selectedDate, setSelectedDateInternal] = React.useState(dayjs(new Date()).tz('Europe/Istanbul')); // Türkiye'nin saat dilimine göre saat bilgisini al
-  const {themeConfig}= useThemeConfig()
-  const {
-    calenderBgColor,
-    calenderTextColor,
-    calenderBorderColor,
-    calenderBorderSize,
-    calenderBoxBgColor,
-    calenderBoxTextColor,
-    calenderBoxBorderSize,
-    calenderBoxBorderColor
-  } = themeConfig.calenderBar;
-  const handleDateChange = (newDate) => {
-    setSelectedDateInternal(newDate);
-  };
+
 
   const ServerDay = (props) => {
     const { day, outsideCurrentMonth, ...other } = props;
@@ -47,19 +34,21 @@ export default function Calendar() {
       </Badge>
     );
   };
-
+  const handleDateChange = (newDate) => {
+    setSelectedDateInternal(newDate);
+  };
   const handleMonthChange = () => {
     // Handle month change if needed
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Paper sx={{borderRadius:3,color:calenderTextColor,border:(`${calenderBorderSize}px solid`),borderColor:calenderBorderColor,}} elevation={3} >
+      <Paper sx={{ borderRadius: 3 }} elevation={3} >
 
 
         <Stack spacing={1}>
           <DateCalendar
-            sx={{ borderRadius: 3, width: "100%", height: 300,   bgcolor:calenderBgColor }}
+            sx={{ borderRadius: 3, width: "100%", height: 300, }}
             value={selectedDate}
             onChange={handleDateChange}
             onMonthChange={handleMonthChange}
@@ -69,7 +58,7 @@ export default function Calendar() {
             }}
           />
           <Stack>
-            <Card elevation={3} sx={{bgcolor:calenderBoxBgColor,color:calenderBoxTextColor}}>
+            <Card elevation={3}>
               <CardContent>
                 <Typography>{selectedDate.toDate().toDateString()}</Typography>
                 <Divider />
@@ -84,7 +73,7 @@ export default function Calendar() {
                     <Typography>Etkinlik Yürüyüşü</Typography>
                   </Stack>
                   <Stack>
-                    <Chip sx={{color:calenderBoxTextColor}} label="12.30" />
+                    <Chip label="12.30" />
 
                   </Stack>
                 </Stack>

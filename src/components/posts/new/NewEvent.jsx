@@ -2,20 +2,17 @@ import { Stack, TextField } from '@mui/material';
 import React, { useState } from 'react';
 
 
-const NewEvent = () => {
-  const [eventName, setEventName] = useState('');
-  const [startDate, setStartDate] = useState('DATE');
-  const [endDate, setEndDate] = useState('DATE');
-  const [comment, setComment] = useState('');
+const NewEvent = ({eventName, setEventName,startDate, setStartDate,endDate, setEndDate,comment, setComment, location, setLocation}) => {
 
   return (
     <Stack spacing={1} padding={1}>
       <TextField
-        label="Event"
+        label="Event name"
         size="small"
         value={eventName}
         onChange={(e) => setEventName(e.target.value)}
       />
+      <TextField size='small' label="City/Country" value={location} onChange={(e)=>setLocation(e.target.value)}/>
       <Stack direction="row" spacing={1}>
         <TextField
           fullWidth

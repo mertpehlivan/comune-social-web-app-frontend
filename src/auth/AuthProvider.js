@@ -1,55 +1,69 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
-import { Box, CircularProgress, Container, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Stack } from '@mui/material';
 import { Book } from '@mui/icons-material';
-
-
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthRoutes } from './AuthRoutes';
+import axios from 'axios';
+import { authenticatedFetch } from '../services/AuthService';
 
 const UserContext = createContext();
 export const useUserContext = () => useContext(UserContext);
 
 const AuthProvider = ({ children }) => {
-    const [userId, setUserId] = useState(null);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState({});
+    const [role, setRole] = useState("");
     const [token, setToken] = useState("");
     const [authenticated, setAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
-
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
             setIsLoading(true);
-
             try {
                 const authToken = localStorage.getItem("access-token");
-
                 if (!authToken) {
                     setAuthenticated(false);
                     setIsLoading(false);
                     return;
                 }
-                setIsLoading(true)
-                // const responseUser = await getUserBox(authToken);
-                // setUser(responseUser.data)
-
-                // setAuthenticated(true);
-                // setIsLoading(false)
-                // console.log("yeniden başlatıldı")
+                const response = await authenticatedFetch(authToken);
+                setUser(response.data);
+                setRole(response.data.accountRole);  // Set role based on response
+                setAuthenticated(true);
                 setToken(authToken);
             } catch (error) {
+                localStorage.clear();
                 setAuthenticated(false);
-                console.error("user not found")
+                navigate("/login");
+                console.error(error);
             } finally {
                 setIsLoading(false);
             }
         };
-
         checkAuth();
-    }, [authenticated]);
+    }, [navigate]);
+
+    const handleAuth = (response) => {
+        setAuthenticated(true);
+        setUser(response.account);
+        setToken(response.token);
+        setRole(response.account.accountRole);
+        localStorage.setItem("access-token", response.token);
+        if (response.account.accountRole === "COMMUNITY") {
+            navigate(`/community/${response.account.id}`);
+        } else if (response.account.accountRole === "USER") {
+            navigate("/home");
+        }
+    };
+
+    const handleLogOut = () => {
+        localStorage.clear();
+        setUser({});
+        setToken("");
+        setRole("");
+        navigate("/login");
+    };
 
     if (isLoading) {
         return (
@@ -61,17 +75,15 @@ const AuthProvider = ({ children }) => {
                     </Box>
                 </Stack>
             </Stack>
-        )
-
+        );
     }
 
     return (
         <UserContext.Provider
-            value={{ isLoading, user, userId, setUserId, token, setToken, authenticated, setAuthenticated }}
+            value={{ isLoading, user, token, setToken, authenticated, setAuthenticated, handleAuth, handleLogOut }}
         >
-            <>
-                <AuthRoutes />
-            </>
+            <AuthRoutes />
+            {children}
         </UserContext.Provider>
     );
 };

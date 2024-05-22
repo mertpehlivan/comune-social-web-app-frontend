@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Container, Divider, Grid, IconButton, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Logo from '../assets/2.svg'
-import { ArtTrack, Biotech, CalendarMonth, ConnectWithoutContact, DownhillSkiing, Gamepad, HealthAndSafety, MoreVert, MoreVertOutlined, Public, Schedule, Search, Sports, TravelExplore } from '@mui/icons-material'
+import { ArtTrack, Biotech, CalendarMonth, ConnectWithoutContact, DownhillSkiing, Gamepad, HealthAndSafety, MoreVert, MoreVertOutlined, People, Public, Schedule, Search, Sports, TravelExplore } from '@mui/icons-material'
 import BannerImage from '../assets/Online world-cuate.svg'
 import { Link } from 'react-router-dom'
 import ImageView from '../assets/image.jpg'
@@ -28,8 +28,8 @@ const HomePage = () => {
 
 
           <Stack direction="row" height={40}>
-            <Link to="/login"><Button>Login</Button></Link> 
-            <Button variant='contained'>Sign up</Button>
+            <Link to="/login"><Button>Login</Button></Link>
+            <Link to="/signup"><Button variant='contained'>Sign up</Button></Link>
           </Stack>
 
         </Stack>
@@ -41,6 +41,12 @@ const HomePage = () => {
               <Stack spacing={2}>
                 <Typography variant='h2'>We are stronger together!</Typography>
                 <Typography width={400}>Welcome to the Comune family! We are stronger together because we believe that the strength of communities lies in acting together. Comune is a platform for everyone to embrace, support and lift each other forward.</Typography>
+                <Link to="/signup-community"> 
+                  <Button sx={{ width: 300, height: 50 }} startIcon={<People />} variant='outlined'>
+                    Create Community
+                  </Button>
+                </Link>
+
               </Stack>
 
               <Box component="img" src={BannerImage} width={600} />

@@ -1,11 +1,28 @@
 import { Avatar, Box, Divider, Paper, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BannerImage from '../../assets/banner.png'
-import { CommuteRounded } from '@mui/icons-material'
+import {getCommunityFetch} from '../../services/CommunityService'
+import { useParams } from 'react-router-dom'
 import { useUserContext } from '../../auth/AuthProvider'
 
-const UserBox = () => {
-    const {user} = useUserContext()
+
+const CommunityBar = () => {
+    const {id} = useParams()
+    const {token} = useUserContext()
+    const [loading,setLoading] = useState(false)
+    useEffect(() => {
+       const fetch = async () =>{
+            setLoading(true)
+            const response = await getCommunityFetch(token,id)
+            setLoading(false)
+            console.log(response.data)
+       }
+        fetch()
+       
+    }, []);
+    if (loading) {
+        return "Loading..."
+    }
     return (
 
         <Paper elevation={2} sx={{borderRadius:3}}>
@@ -69,4 +86,4 @@ const UserBox = () => {
     )
 }
 
-export default UserBox
+export default CommunityBar

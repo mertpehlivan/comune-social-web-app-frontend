@@ -1,11 +1,9 @@
 import { QuestionMark, Close, Add } from '@mui/icons-material';
 import { Button, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const NewVoting = () => {
-    const [question, setQuestion] = useState('');
-    const [options, setOptions] = useState(['']);
-
+const NewVoting = ({setQuestion,question,options,setOptions}) => {
+     
     const handleAddOption = () => {
         setOptions([...options, '']);
     };
@@ -44,11 +42,11 @@ const NewVoting = () => {
                             onChange={(e) => handleOptionChange(e.target.value, index)}
                         />
                         <IconButton onClick={() => handleRemoveOption(index)} size="small">
-                            <Close sx={{color:"primary.main"}}/>
+                            <Close sx={{ color: "primary.main" }} />
                         </IconButton>
                     </Stack>
                 ))}
-                <Button variant='outlined' startIcon={<Add/>} onClick={handleAddOption} size="small">
+                <Button variant='outlined' startIcon={<Add />} onClick={handleAddOption} size="small">
                     Add Option
                 </Button>
             </Stack>

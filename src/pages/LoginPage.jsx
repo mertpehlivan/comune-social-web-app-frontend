@@ -1,10 +1,58 @@
-import { Box, Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, CircularProgress, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import LoginImage from '../assets/Login-rafiki.svg'
 import Logo from '../assets/2.svg'
-import { Link } from 'react-router-dom'
-import { Home, Login, People } from '@mui/icons-material'
+import { Link, useNavigate } from 'react-router-dom'
+import { Error, Home, Login, People } from '@mui/icons-material'
+import { loginFetch } from '../services/AuthService'
+import { useUserContext } from '../auth/AuthProvider'
+
+
+
 const LoginPage = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
+  const { handleAuth } = useUserContext()
+  const handleChange = (e) => {
+    setError("")
+    const { name, value } = e.target
+    if (name === "email") {
+      setEmail(value)
+    } else if (name === "password") {
+      setPassword(value)
+    }
+  }
+
+
+
+
+
+
+  const handleLogin = async () => {
+    const data = {
+      email: email,
+      password: password
+    }
+
+    try {
+      setLoading(true)
+      const response = await loginFetch(data)
+      handleAuth(response.data)
+      
+     
+      setLoading(false)
+      console.log(response.data)
+    } catch (error) {
+      setError(error.response.data.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
   return (
     <Container >
       <Stack sx={{ height: "100vh" }}>
@@ -13,7 +61,10 @@ const LoginPage = () => {
             <Grid container>
               <Grid item xs={6}>
                 <Stack justifyContent="start" alignItems="start" pl={2}>
-                  <Button variant='outlined' startIcon={<Home />}>Go Home</Button>
+                  <Link to="/">
+
+                    <Button variant='outlined' startIcon={<Home />}>Go Home</Button>
+                  </Link>
                 </Stack>
                 <Stack alignItems="center" justifyContent="center" width="100%" >
                   <Box component="img" src={Logo} width={100} />
@@ -26,10 +77,16 @@ const LoginPage = () => {
                     </Stack>
 
                     <Stack spacing={2} width="50%" >
-                      <TextField label="E-mail" fullWidth size='small' />
-                      <TextField label="password" type='password' fullWidth size='small' />
+                      <TextField variant='standard' name='email' value={email} onChange={handleChange} label="E-mail" type='email' fullWidth size='small' />
+                      <TextField variant='standard' name='password' value={password} onChange={handleChange} label="Password" type='password' fullWidth size='small' />
+                      {error && <Stack color="red" direction="row" justifyContent="center" spacing={0.5}>
+                        <Error />
+                        <Typography>{error}</Typography>
+                      </Stack>}
+
                     </Stack>
-                    <Button href='/home' sx={{ width: 300, height: 50 }} startIcon={<Login />} variant='contained'>
+
+                    <Button onClick={handleLogin} sx={{ width: 300, height: 50 }} startIcon={(loading ? <CircularProgress /> : <Login />)} variant='contained'>
                       Log in
                     </Button>
                   </Stack>
@@ -39,9 +96,11 @@ const LoginPage = () => {
               <Grid item xs={6}>
                 <Stack alignItems="center">
                   <Box component="img" src={LoginImage} width={500} />
-                  <Button sx={{ width: 300, height: 50 }} startIcon={<People />} variant='outlined'>
-                    Create Community
-                  </Button>
+                  <Link to="/signup-community">
+                    <Button sx={{ width: 300, height: 50 }} startIcon={<People />} variant='outlined'>
+                      Create Community
+                    </Button>
+                  </Link>
                 </Stack>
               </Grid>
             </Grid>
